@@ -36,6 +36,13 @@ public class MainMenuLogic
                         registrationForm.Password = Console.ReadLine()!;
                         Console.WriteLine("Please confirm your password: ");
                         registrationForm.ConfirmedPassword = Console.ReadLine()!;
+                        Console.WriteLine("Your Phone number");
+                        registrationForm.Phone = Console.ReadLine();
+                        Console.WriteLine("Your adress");
+                        registrationForm.Address = Console.ReadLine();
+
+                        var entityTest = UserFactory.Create(registrationForm);
+                        Console.Write($"{entityTest.UserId}, {entityTest.Name}, {entityTest.Surname}, {entityTest.Email}, {entityTest.Password}, {entityTest.Phone}, {entityTest.Address}");
                         break;
                     case "2" :
                         Console.WriteLine("You have chosen 2");

@@ -17,7 +17,10 @@ public static class UserFactory
             Name = form.Name,
             Surname = form.Surname,
             Email = form.Email,
-            Password = form.Password
+            Password = form.Password,
+            Phone = string.IsNullOrEmpty(form.Phone) ? "Phone number not provided" : form.Phone,
+            Address = string.IsNullOrEmpty(form.Address) ? "Address not provided" : form.Address
+            
         };
     }
 
@@ -27,7 +30,9 @@ public static class UserFactory
         {
             UserId = userEntity.UserId,
             FullName = $"{userEntity.Name} {userEntity.Surname}",
-            Email = userEntity.Email
+            Email = userEntity.Email,
+            Phone = userEntity.Phone,
+            Address = userEntity.Address
         };
     }
 }

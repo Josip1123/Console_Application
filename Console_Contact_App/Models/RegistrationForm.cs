@@ -21,7 +21,10 @@ public class RegistrationForm
     
     public string? ConfirmedPassword { get; set; }
     
+    public string? Phone { get; set; }
     
-    public string? FullName => $"{Name} {Surname}";
+    public string? Address { get; set; }
+    
+    
 
 }
