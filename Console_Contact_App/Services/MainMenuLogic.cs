@@ -1,10 +1,7 @@
 
-using Console_Contact_App.Factories;
-
-
 namespace Console_Contact_App.Services;
 
-public class MainMenuLogic
+public static class MainMenuLogic
 {
     public static void GetUserInput()
     {
@@ -23,26 +20,8 @@ public class MainMenuLogic
                 switch (userInput)
                 {
                     case "1" :
-                        Console.WriteLine("You have chosen 1");
                         isSelected = true;
-                        var registrationForm = UserFactory.Create();
-                        Console.WriteLine("Type in your name");
-                        registrationForm.Name = Console.ReadLine()!;
-                        Console.WriteLine("Type in your surname");
-                        registrationForm.Surname = Console.ReadLine()!;
-                        Console.WriteLine("Type your email");
-                        registrationForm.Email = Console.ReadLine()!;
-                        Console.WriteLine("Type in your password:");
-                        registrationForm.Password = Console.ReadLine()!;
-                        Console.WriteLine("Please confirm your password: ");
-                        registrationForm.ConfirmedPassword = Console.ReadLine()!;
-                        Console.WriteLine("Your Phone number");
-                        registrationForm.Phone = Console.ReadLine();
-                        Console.WriteLine("Your adress");
-                        registrationForm.Address = Console.ReadLine();
-
-                        var entityTest = UserFactory.Create(registrationForm);
-                        Console.Write($"{entityTest.UserId}, {entityTest.Name}, {entityTest.Surname}, {entityTest.Email}, {entityTest.Password}, {entityTest.Phone}, {entityTest.Address}");
+                        UserRegistration.Run();
                         break;
                     case "2" :
                         Console.WriteLine("You have chosen 2");
@@ -50,14 +29,6 @@ public class MainMenuLogic
                         break;
                     case "3" :
                         Console.WriteLine("You have chosen 3");
-                        isSelected = true;
-                        break;
-                    case "4" :
-                        Console.WriteLine("You have chosen 4");
-                        isSelected = true;
-                        break;
-                    case "5" :
-                        Console.WriteLine("You have chosen 5");
                         isSelected = true;
                         break;
                     default:
