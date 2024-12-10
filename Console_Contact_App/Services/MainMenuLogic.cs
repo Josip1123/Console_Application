@@ -1,4 +1,6 @@
-using System.Diagnostics;
+
+using Console_Contact_App.Factories;
+
 
 namespace Console_Contact_App.Services;
 
@@ -23,6 +25,17 @@ public class MainMenuLogic
                     case "1" :
                         Console.WriteLine("You have chosen 1");
                         isSelected = true;
+                        var registrationForm = UserFactory.Create();
+                        Console.WriteLine("Type in your name");
+                        registrationForm.Name = Console.ReadLine()!;
+                        Console.WriteLine("Type in your surname");
+                        registrationForm.Surname = Console.ReadLine()!;
+                        Console.WriteLine("Type your email");
+                        registrationForm.Email = Console.ReadLine()!;
+                        Console.WriteLine("Type in your password:");
+                        registrationForm.Password = Console.ReadLine()!;
+                        Console.WriteLine("Please confirm your password: ");
+                        registrationForm.ConfirmedPassword = Console.ReadLine()!;
                         break;
                     case "2" :
                         Console.WriteLine("You have chosen 2");
@@ -39,25 +52,6 @@ public class MainMenuLogic
                     case "5" :
                         Console.WriteLine("You have chosen 5");
                         isSelected = true;
-                        break;
-                    case "add" :
-                        Console.WriteLine("You have chosen add");
-                        isSelected = true;
-                        break;
-                    case "show" :
-                        Console.WriteLine("You have chosen show");
-                        isSelected = true;
-                        break;
-                    case "delete" :
-                        Console.WriteLine("You have chosen delete");
-                        isSelected = true;
-                        break;
-                    case "edit" :
-                        Console.WriteLine("You have chosen edit");
-                        isSelected = true;
-                        break;
-                    case "exit" :
-                        Console.WriteLine("You have chosen exit");
                         break;
                     default:
                         Console.WriteLine("Error, not a valid option, try again");
