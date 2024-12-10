@@ -7,7 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="28c4f4b2-17f5-4cb6-9162-963103255d0c" name="Changes" comment="changes to some naming and logic" />
+    <list default="true" id="28c4f4b2-17f5-4cb6-9162-963103255d0c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Console_Contact_App/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Console_Contact_App/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,7 +93,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732830201821</updated>
-      <workItem from="1732830204005" duration="14389000" />
+      <workItem from="1732830204005" duration="16634000" />
     </task>
     <task id="LOCAL-00001" summary="Project start, main menu start">
       <option name="closed" value="true" />
@@ -125,7 +127,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733839835882</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added some validation and new file for geting user input logic">
+      <option name="closed" value="true" />
+      <created>1733851178427</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1733851178427</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,6 +149,7 @@
     <MESSAGE value="Project start, main menu" />
     <MESSAGE value="Made fsctories for user data handling" />
     <MESSAGE value="changes to some naming and logic" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes to some naming and logic" />
+    <MESSAGE value="added some validation and new file for geting user input logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="added some validation and new file for geting user input logic" />
   </component>
 </project>

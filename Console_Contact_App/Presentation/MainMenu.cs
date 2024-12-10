@@ -10,7 +10,5 @@ public static class MainMenu
         Console.WriteLine("2. Show All Contacts");
         Console.WriteLine("5. Exit");
         Console.Write("Type in a number of the menu item you'd like to access: ");
-
-        MainMenuLogic.GetUserInput();
     }
 }

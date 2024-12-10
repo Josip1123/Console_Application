@@ -1,15 +1,17 @@
 
 namespace Console_Contact_App.Services;
 
-public static class MainMenuLogic
+public class MainMenuLogic
 {
-    public static void GetUserInput()
+    public void GetUserInput()
     {
         var userInput = Console.ReadLine()!.Trim().ToLower();
         var isSelected = false;
 
         while (!isSelected)
         {
+            var userRegistration = new UserRegistration();
+            
             if (string.IsNullOrEmpty(userInput))
             {
                 Console.WriteLine("INVALID FORMAT: Type in number or name of the menu option");
@@ -21,7 +23,7 @@ public static class MainMenuLogic
                 {
                     case "1" :
                         isSelected = true;
-                        UserRegistration.Run();
+                        userRegistration.Run();
                         break;
                     case "2" :
                         Console.WriteLine("You have chosen 2");

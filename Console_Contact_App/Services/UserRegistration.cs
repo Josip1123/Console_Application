@@ -2,17 +2,18 @@ using Console_Contact_App.Factories;
 
 namespace Console_Contact_App.Services;
 
-public static class UserRegistration
+public class UserRegistration
 {
-    public static void Run()
+    public void Run()
     {
         var registrationForm = UserFactory.Create();
+        var userRegistration = new UserRegistration();
         Console.WriteLine("Type in your name");
-        registrationForm.Name = ValidateInput("name");
+        registrationForm.Name = userRegistration.ValidateInput("name");
         Console.WriteLine("Type in your surname");
-        registrationForm.Surname = ValidateInput("surname");
+        registrationForm.Surname = userRegistration.ValidateInput("surname");
         Console.WriteLine("Type your email");
-        registrationForm.Email = ValidateInput("e-mail");
+        registrationForm.Email = userRegistration.ValidateInput("e-mail");
         Console.WriteLine("Type in your password:");
         registrationForm.Password = Console.ReadLine()!;
         Console.WriteLine("Please confirm your password: ");
@@ -26,7 +27,7 @@ public static class UserRegistration
         Console.Write($"{entityTest.UserId}, {entityTest.Name}, {entityTest.Surname}, {entityTest.Email}, {entityTest.Password}, {entityTest.Phone}, {entityTest.Address}");
     }
 
-    private static string ValidateInput(string field)
+    private string ValidateInput(string field)
     {
         string input;
         do
