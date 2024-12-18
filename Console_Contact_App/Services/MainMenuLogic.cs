@@ -3,14 +3,15 @@ namespace Console_Contact_App.Services;
 
 public class MainMenuLogic
 {
+    private bool _isSelected;
+    
     public void GetUserInput()
     {
         var userInput = Console.ReadLine()!.Trim().ToLower();
-        var isSelected = false;
+        
 
-        while (!isSelected)
+        while (!_isSelected)
         {
-            var userRegistration = new UserRegistration();
             
             if (string.IsNullOrEmpty(userInput))
             {
@@ -22,16 +23,20 @@ public class MainMenuLogic
                 switch (userInput)
                 {
                     case "1" :
-                        isSelected = true;
-                        userRegistration.Run();
+                        _isSelected = true;
+                        var userRegistration = new UserRegistration();
+                        userRegistration.Register();
                         break;
                     case "2" :
-                        Console.WriteLine("You have chosen 2");
-                        isSelected = true;
+                        Console.WriteLine("Showing All Contacts");
+                        DataHandling.ShowAllUsers();
+                        _isSelected = true;
                         break;
                     case "3" :
-                        Console.WriteLine("You have chosen 3");
-                        isSelected = true;
+                        Console.WriteLine("Exiting the program...");
+                        _isSelected = true;
+                        Console.ReadKey();
+                        Environment.Exit(0);
                         break;
                     default:
                         Console.WriteLine("Error, not a valid option, try again");

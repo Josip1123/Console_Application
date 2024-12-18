@@ -9,7 +9,7 @@ class Program
     private static void Main()
     {
         MainMenu.ShowMainMenu();
-        var mainMenuLogic = new MainMenuLogic();
-        mainMenuLogic.GetUserInput();
+        var userInput = new MainMenuLogic();
+        userInput.GetUserInput();
     }
 }

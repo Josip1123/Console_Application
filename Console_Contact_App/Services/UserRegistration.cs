@@ -1,44 +1,54 @@
 using Console_Contact_App.Factories;
+using Console_Contact_App.Presentation;
 
 namespace Console_Contact_App.Services;
 
 public class UserRegistration
 {
-    public void Run()
+    public void Register()
     {
-        var registrationForm = UserFactory.Create();
-        var userRegistration = new UserRegistration();
-        Console.WriteLine("Type in your name");
-        registrationForm.Name = userRegistration.ValidateInput("name");
-        Console.WriteLine("Type in your surname");
-        registrationForm.Surname = userRegistration.ValidateInput("surname");
-        Console.WriteLine("Type your email");
-        registrationForm.Email = userRegistration.ValidateInput("e-mail");
-        Console.WriteLine("Type in your password:");
-        registrationForm.Password = Console.ReadLine()!;
-        Console.WriteLine("Please confirm your password: ");
-        registrationForm.ConfirmedPassword = Console.ReadLine()!;
-        Console.WriteLine("Your Phone number");
-        registrationForm.Phone = Console.ReadLine();
-        Console.WriteLine("Your adress");
-        registrationForm.Address = Console.ReadLine();
+        var isDoneRegistering = false;
 
-        var entityTest = UserFactory.Create(registrationForm);
-        Console.Write($"{entityTest.UserId}, {entityTest.Name}, {entityTest.Surname}, {entityTest.Email}, {entityTest.Password}, {entityTest.Phone}, {entityTest.Address}");
-    }
-
-    private string ValidateInput(string field)
-    {
-        string input;
-        do
+        while (!isDoneRegistering)
         {
-            input = Console.ReadLine()!.Trim();
-            if (string.IsNullOrEmpty(input))
-            {
-                Console.WriteLine($"INVALID FORMAT: Please type in your {field}");
-            }
-        } while (string.IsNullOrEmpty(input));
+            var registrationForm = UserFactory.Create();
+        
+            Console.WriteLine("Type in your name");
+            registrationForm.Name = Validators.ValidateInput("name");
+        
+            Console.WriteLine("Type in your surname");
+            registrationForm.Surname = Validators.ValidateInput("last name");
+        
+            Console.WriteLine("Type your email");
+            registrationForm.Email = Validators.ValidateInput("email");
+        
+            Console.WriteLine("Type in your password:");
+            registrationForm.Password = Validators.ValidateInput("password");
+        
+            Console.WriteLine("Please confirm your password: ");
+            registrationForm.ConfirmedPassword = Validators.IsSame(registrationForm.Password, "Passwords do not match!");
+        
+            Console.WriteLine("Your Phone number");
+            registrationForm.Phone = Console.ReadLine();
+        
+            Console.WriteLine("Your address");
+            registrationForm.Address = Console.ReadLine();
+        
+            var userEntity = UserFactory.Create(registrationForm);
+            DataHandling.SaveToList(userEntity);
+            
+            Console.WriteLine("Do you want to register more users? Type y for 'yes' or another key to get back to main menu");
+            var userDoneInput = Console.ReadLine()!.Trim().ToLower();
 
-        return input;
+            if (userDoneInput != "y")
+            {
+                isDoneRegistering = true;
+            }   
+        }
+        
+        MainMenu.ShowMainMenu();
+        var userInput = new MainMenuLogic();
+        userInput.GetUserInput();
     }
+    
 }
