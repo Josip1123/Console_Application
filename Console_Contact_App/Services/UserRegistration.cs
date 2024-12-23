@@ -1,3 +1,4 @@
+
 using Console_Contact_App.Factories;
 using Console_Contact_App.Presentation;
 
@@ -36,6 +37,7 @@ public class UserRegistration
         
             var userEntity = UserFactory.Create(registrationForm);
             DataHandling.SaveToList(userEntity);
+            DataHandling.SaveUsersToFile("Users.txt");
             
             Console.WriteLine("Do you want to register more users? Type y for 'yes' or another key to get back to main menu");
             var userDoneInput = Console.ReadLine()!.Trim().ToLower();

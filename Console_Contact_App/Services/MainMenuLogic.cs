@@ -1,4 +1,5 @@
 
+
 namespace Console_Contact_App.Services;
 
 public class MainMenuLogic
@@ -24,11 +25,13 @@ public class MainMenuLogic
                 {
                     case "1" :
                         _isSelected = true;
+                        DataHandling.GetFileInitially("Users.txt");
                         var userRegistration = new UserRegistration();
                         userRegistration.Register();
                         break;
                     case "2" :
-                        Console.WriteLine("Showing All Contacts");
+                        Console.WriteLine("Showing All Contacts...");
+                        DataHandling.GetUsersFromFile("Users.txt");
                         DataHandling.ShowAllUsers();
                         _isSelected = true;
                         break;
