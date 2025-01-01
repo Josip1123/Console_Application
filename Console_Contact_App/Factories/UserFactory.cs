@@ -9,18 +9,20 @@ public static class UserFactory
         return new RegistrationForm();
     }
 
-    public static UserEntity Create(RegistrationForm form)
+    public static UserEntity Create(
+        RegistrationForm form,
+        string id
+    )
     {
         return new UserEntity
         {
-            UserId = Guid.NewGuid().ToString(),
+            UserId = id,
             Name = form.Name,
             Surname = form.Surname,
             Email = form.Email,
             Password = form.Password,
             Phone = string.IsNullOrEmpty(form.Phone) ? "Phone number not provided" : form.Phone,
             Address = string.IsNullOrEmpty(form.Address) ? "Address not provided" : form.Address
-            
         };
     }
 

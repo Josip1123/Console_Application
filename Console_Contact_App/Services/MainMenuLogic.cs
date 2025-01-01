@@ -1,12 +1,10 @@
+using Console_Contact_App.Interfaces;
 using Console_Contact_App.Models;
 using Console_Contact_App.Presentation;
 
 namespace Console_Contact_App.Services;
 
-public class MainMenuLogic(
-    UserRegistration userRegistration,
-    DataHandling dataHandling
-)
+public class MainMenuLogic(IUserService userService)
 {
     private bool _isSelected;
 
@@ -48,28 +46,41 @@ public class MainMenuLogic(
 
     private void HandleRegisterUser()
     {
-        _isSelected = true;
-        dataHandling.GetFileInitially("Users.txt");
-        var userEntity = userRegistration.Register();
+        userService.InitializeUsers("Users.txt");
+        var userEntity = userService.Register();
 
         if (userEntity == null) HandleRegisterUser();
-
-        dataHandling.SaveToList(userEntity!);
-        dataHandling.SaveUsers("Users.txt");
+        userService.SaveUsers("Users.txt", [userEntity]);
 
         Console.WriteLine(
             "Do you want to register more users? Type y for 'yes' or another key to get back to main menu");
         var userDoneInput = Console.ReadLine()!.Trim().ToLower();
 
-        if (userDoneInput == "y") HandleRegisterUser();
+        if (userDoneInput == "y")
+        {
+            _isSelected = true;
+            HandleRegisterUser();
+        }
+        else
+        {
+            _isSelected = false;
+            MainMenu.ShowMainMenu();
+            GetUserInput();
+        }
     }
+
 
     private void HandleShowAllUsers()
     {
         Console.WriteLine("Showing All Contacts...");
         try
         {
-            var users = dataHandling.GetUsers("Users.txt");
+            var users = userService.GetUsers("Users.txt");
+            foreach (var item in users)
+            {
+                Console.WriteLine(
+                    $"{users.IndexOf(item) + 1}. {item.UserId}, {item.FullName}, {item.Email}, {item.Phone}, {item.Address}");
+            }
         }
         catch (NoUserFileException e)
         {
@@ -79,10 +90,8 @@ public class MainMenuLogic(
             Console.WriteLine(e);
         }
 
-        dataHandling.ShowAllUsers();
         MainMenu.ShowMainMenu();
         GetUserInput();
-        _isSelected = true;
     }
 
     private void HandleExit()

@@ -9,6 +9,4 @@ public class UserEntity
     public string? Password { get; init; }
     public string? Phone { get; init; }
     public string? Address { get; init; }
-    
-    
 }
