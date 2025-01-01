@@ -9,7 +9,11 @@ class Program
     private static void Main()
     {
         MainMenu.ShowMainMenu();
-        var userInput = new MainMenuLogic();
-        userInput.GetUserInput();
+        var mainMenuLogic = new MainMenuLogic(
+            new UserRegistration(),
+            new DataHandling()
+        );
+
+        mainMenuLogic.GetUserInput();
     }
 }
