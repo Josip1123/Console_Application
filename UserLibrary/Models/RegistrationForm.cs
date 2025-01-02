@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-namespace Console_Contact_App.Models;
+
+namespace UserLibrary.Models;
 
 public class RegistrationForm
 {

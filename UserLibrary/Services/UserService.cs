@@ -1,9 +1,9 @@
 using System.Text.Json;
-using Console_Contact_App.Factories;
-using Console_Contact_App.Interfaces;
-using Console_Contact_App.Models;
+using UserLibrary.Factories;
+using UserLibrary.Interfaces;
+using UserLibrary.Models;
 
-namespace Console_Contact_App.Services;
+namespace UserLibrary.Services;
 
 public class UserService : IUserService
 {

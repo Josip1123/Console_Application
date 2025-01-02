@@ -1,4 +1,4 @@
-﻿namespace Console_Contact_App.Services;
+﻿namespace UserLibrary.Services;
 
 public static class Validators
 {

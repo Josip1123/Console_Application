@@ -1,6 +1,6 @@
-using Console_Contact_App.Models;
+using UserLibrary.Models;
 
-namespace Console_Contact_App.Factories;
+namespace UserLibrary.Factories;
 
 public static class UserFactory
 {

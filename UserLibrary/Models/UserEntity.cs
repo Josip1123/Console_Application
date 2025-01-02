@@ -1,4 +1,4 @@
-namespace Console_Contact_App.Models;
+namespace UserLibrary.Models;
 
 public class UserEntity
 {

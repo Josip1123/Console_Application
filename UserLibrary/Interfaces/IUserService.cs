@@ -1,6 +1,6 @@
-using Console_Contact_App.Models;
+using UserLibrary.Models;
 
-namespace Console_Contact_App.Interfaces;
+namespace UserLibrary.Interfaces;
 
 public interface IUserService
 {

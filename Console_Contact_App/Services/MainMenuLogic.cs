@@ -1,6 +1,6 @@
-using Console_Contact_App.Interfaces;
-using Console_Contact_App.Models;
 using Console_Contact_App.Presentation;
+using UserLibrary.Interfaces;
+using UserLibrary.Models;
 
 namespace Console_Contact_App.Services;
 
