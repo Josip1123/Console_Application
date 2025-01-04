@@ -1,3 +1,4 @@
+using UserLibrary.Helpers;
 using UserLibrary.Models;
 
 namespace UserLibrary.Factories;
@@ -20,7 +21,7 @@ public static class UserFactory
             Name = form.Name,
             Surname = form.Surname,
             Email = form.Email,
-            Password = form.Password,
+            Password = PasswordHasher.HashPassword(form.Password!),
             Phone = string.IsNullOrEmpty(form.Phone) ? "Phone number not provided" : form.Phone,
             Address = string.IsNullOrEmpty(form.Address) ? "Address not provided" : form.Address
         };

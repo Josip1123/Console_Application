@@ -1,5 +1,6 @@
 using System.Text.Json;
 using UserLibrary.Factories;
+using UserLibrary.Helpers;
 using UserLibrary.Interfaces;
 using UserLibrary.Models;
 
@@ -51,7 +52,7 @@ public class UserService : IUserService
 
     public void InitializeUsers(string filePath)
     {
-        if (File.Exists(filePath) == false)
+        if (!File.Exists(filePath))
         {
             var usersJsoned = JsonSerializer.Serialize(_savedUsers);
             File.WriteAllText(filePath, usersJsoned);
@@ -79,10 +80,11 @@ public class UserService : IUserService
             registrationForm.Surname = Validators.ValidateInput("last name");
 
             Console.WriteLine("Type your email");
-            registrationForm.Email = Validators.ValidateInput("email");
+            registrationForm.Email = Validators.ValidateWithRegex("email", "Type in valid Email Address", @"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                );
 
-            Console.WriteLine("Type in your password:");
-            registrationForm.Password = Validators.ValidateInput("password");
+            Console.WriteLine("Type in your password that should contain an number, symbol, uppercase letter and be minimum of 8 characters long:");
+            registrationForm.Password = Validators.ValidateWithRegex("password", "Wrong format",@"^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$");
 
             Console.WriteLine("Please confirm your password: ");
             registrationForm.ConfirmedPassword =
@@ -96,7 +98,7 @@ public class UserService : IUserService
 
             userEntity = UserFactory.Create(
                 registrationForm,
-                Guid.NewGuid().ToString()
+                GuidCreator.CreateNewId()
             );
             isDoneRegistering = true;
         }

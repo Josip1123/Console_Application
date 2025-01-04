@@ -50,7 +50,7 @@ public class MainMenuLogic(IUserService userService)
         var userEntity = userService.Register();
 
         if (userEntity == null) HandleRegisterUser();
-        userService.SaveUsers("Users.txt", [userEntity]);
+        userService.SaveUsers("Users.txt", [userEntity!]);
 
         Console.WriteLine(
             "Do you want to register more users? Type y for 'yes' or another key to get back to main menu");

@@ -1,4 +1,6 @@
-﻿namespace UserLibrary.Services;
+﻿using System.Text.RegularExpressions;
+
+namespace UserLibrary.Services;
 
 public static class Validators
 {
@@ -19,7 +21,7 @@ public static class Validators
     
     public static string IsSame(string item, string errorText)
     {
-        var doPasswordsMatch = false;
+        var doItemsMatch = false;
         string input;
 
         do
@@ -31,11 +33,36 @@ public static class Validators
             }
             else
             {
-                doPasswordsMatch = true;
+                doItemsMatch = true;
             }
-        } while (!doPasswordsMatch);
+        } while (!doItemsMatch);
         
 
         return input;
     }
+
+    public static string ValidateWithRegex(string item, string errorText, string regexPattern)
+    {
+        var isValid = false;
+        string input;
+        
+        Regex regex = new(regexPattern);
+
+        do
+        {
+            input = Console.ReadLine()!.Trim();
+            if (!regex.IsMatch(input))
+            {
+                Console.WriteLine($"{errorText}");
+            }
+            else
+            {
+                isValid = true;
+            }
+        } while (!isValid);
+        
+
+        return input;
+    }
+    
 }
