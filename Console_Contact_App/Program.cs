@@ -10,7 +10,8 @@ class Program
     {
         MainMenu.ShowMainMenu();
         var mainMenuLogic = new MainMenuLogic(new UserService());
-
-        mainMenuLogic.GetUserInput();
+        
+        var userInput = Console.ReadLine()!.Trim().ToLower();
+        mainMenuLogic.GetUserInput(userInput);
     }
 }

@@ -29,13 +29,13 @@ public class ValidatorsTests
     {
         // Arrange
         var input = "john.doe@gmail.com";
+        var mailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         using (var stringReader = new StringReader(input))
         {
             Console.SetIn(stringReader);
 
             // Act
-            var result = Validators.ValidateWithRegex("email","Wrong format", @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-            
+            var result = Validators.ValidateWithRegex("email","Wrong format", mailRegex );
             // Assert
             Assert.Equal(input, result);
         }

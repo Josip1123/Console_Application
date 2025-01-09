@@ -8,9 +8,9 @@ public class MainMenuLogic(IUserService userService)
 {
     private bool _isSelected;
 
-    public void GetUserInput()
+    public void GetUserInput(string userInput)
     {
-        var userInput = Console.ReadLine()!.Trim().ToLower();
+        
 
         while (!_isSelected)
         {
@@ -31,7 +31,7 @@ public class MainMenuLogic(IUserService userService)
                     break;
                 default:
                     Console.WriteLine("Error, not a valid option, try again");
-                    userInput = Console.ReadLine();
+                    userInput = Console.ReadLine()!;
                     break;
             }
         }
@@ -40,7 +40,8 @@ public class MainMenuLogic(IUserService userService)
     private void HandleInvalidInput()
     {
         Console.WriteLine("INVALID FORMAT: Type in number or name of the menu option");
-        GetUserInput();
+        var userInput = Console.ReadLine()!.Trim().ToLower();
+        GetUserInput(userInput);
     }
 
 
@@ -65,7 +66,8 @@ public class MainMenuLogic(IUserService userService)
         {
             _isSelected = false;
             MainMenu.ShowMainMenu();
-            GetUserInput();
+            var userInput = Console.ReadLine()!.Trim().ToLower();
+            GetUserInput(userInput);
         }
     }
 
@@ -91,7 +93,8 @@ public class MainMenuLogic(IUserService userService)
         }
 
         MainMenu.ShowMainMenu();
-        GetUserInput();
+        var userInput = Console.ReadLine()!.Trim().ToLower();
+        GetUserInput(userInput);
     }
 
     private void HandleExit()

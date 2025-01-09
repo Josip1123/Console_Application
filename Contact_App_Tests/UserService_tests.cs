@@ -1,0 +1,155 @@
+using System.Text.Json;
+using Moq;
+using UserLibrary.Factories;
+using UserLibrary.Interfaces;
+using UserLibrary.Models;
+
+
+namespace Contact_App_Tests;
+
+
+public class UserServiceTests
+
+{
+    [Fact]
+    public void SaveUsers_ShouldCreateFileWithAllUsers()
+    {
+        // Arrange
+        var mockService = new Mock<IUserService>();
+        var filePath = "MockTest.txt";
+
+        var userEntities = new List<UserEntity>
+        {
+            new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+            new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+        };
+        
+        mockService
+            .Setup( userService => userService.SaveUsers(filePath, userEntities))
+            .Callback<string, List<UserEntity>>((path, users) =>
+            {
+                File.WriteAllText(path, JsonSerializer.Serialize(users));
+            });
+
+        // Act
+        mockService.Object.SaveUsers(filePath, userEntities);
+        string fileData = File.ReadAllText(filePath);
+        var jsonedData = JsonSerializer.Deserialize<List<UserEntity>>(fileData);
+
+        // Assert
+        Assert.True(File.Exists(filePath), "Expected file to be created by the mock callback.");
+        Assert.Contains("John", fileData);
+        Assert.Contains("Jane", fileData);
+        Assert.Equal(2,jsonedData!.Count);
+
+        // Clean up
+        File.Delete(filePath);
+    }
+
+    [Fact]
+    
+    public void SaveUsers_ShouldWriteErrorMsgToConsole_WhenError()
+    {
+        // Arrange
+        var mockService = new Mock<IUserService>();
+        var filePath = "Test.txt";
+        List<UserEntity> userEntities = [];
+
+        mockService
+            .Setup(s => s.SaveUsers(filePath, userEntities))
+            .Callback<string, List<UserEntity>>((path, users) => { throw new Exception("Mocked Exception"); });
+        using var consoleOutput = new StringWriter();
+        Console.SetOut(consoleOutput);
+
+        // act
+        try
+        {
+            mockService.Object.SaveUsers(filePath, userEntities);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Something went wrong while saving the user", ex);
+        }
+
+        var output = consoleOutput.ToString();
+        // Assert
+        Assert.Contains("Something went wrong while saving the user", output);
+    }
+    [Fact]
+    public void GetUsers_ShouldReturnEmptyList_WhenNoFilePresent()
+    {
+        // Arrange
+        var mockService = new Mock<IUserService>();
+        var filePath = "Test_Not_Found.txt";
+        List<User> userEntities = [];
+
+        mockService
+            .Setup(s => s.GetUsers(filePath))
+            .Returns([]);
+
+        // act
+        var result = mockService.Object.GetUsers(filePath);
+
+
+        // Assert
+        Assert.Equal(userEntities, result);
+
+    }
+    [Fact]
+    public void GetUsers_ShouldReturnUserEntityList_WhenFileProvided()
+    {
+        // Arrange
+        var mockService = new Mock<IUserService>();
+        var filePath = "Mock_File.txt";
+
+        var userEntities = new List<UserEntity>
+        {
+            new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+            new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+        };
+
+        mockService.Setup(userService => userService.GetUsers(filePath)).Returns(userEntities.Select(userEntity => UserFactory.Create(userEntity)).ToList());
+
+        // act
+        var result = mockService.Object.GetUsers(filePath);
+
+
+        // Assert
+        Assert.IsType<List<User>>(result);
+        Assert.Equal(2, result.Count);
+
+    }
+    
+    [Fact]
+    public void GetUsers_ShouldReturnError_WhenFileDoesntExist()
+    {
+        // Arrange
+        var mockService = new Mock<IUserService>();
+        var filePath = "Mock_File.txt";
+        using var consoleOutput = new StringWriter();
+        Console.SetOut(consoleOutput);
+
+        mockService
+            .Setup(userService => userService.GetUsers(filePath))
+            .Callback(() => { throw new Exception("Mocked No File Exception"); });
+
+        // act
+        try
+        {
+            mockService.Object.GetUsers(filePath);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Invalid file: {filePath}", e);
+        }
+        
+        var output = consoleOutput.ToString();
+        
+        // Assert
+        Assert.Contains("Invalid file:", output);
+
+    }
+}
+
+
+

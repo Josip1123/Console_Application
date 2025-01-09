@@ -28,7 +28,7 @@ public class HelpersTests
     }
 
     [Fact]
-    public void PasswordHasher_ShouldNotMatchOriginalPassword_WhenUsed()
+    public void PasswordHasher_ShouldNotBeTheSameAsOriginalPassword()
     {
         //act
         var mockPassword = "Password123!";
@@ -36,5 +36,29 @@ public class HelpersTests
         
         //assert
         Assert.NotEqual(mockPassword, result);
+    }
+    
+    [Fact]
+    public void PasswordHasher_ShouldReturnTrue_WhenVerifyCorrectPw()
+    {
+        //act
+        var mockPassword = "Password123!";
+        var hashedMockPw = PasswordHasher.HashPassword(mockPassword);
+        var result = PasswordHasher.VerifyPassword(mockPassword, hashedMockPw);
+        
+        //assert
+        Assert.True(result);
+    }
+    [Fact]
+    public void PasswordHasher_ShouldReturnFalse_WhenVerifyIncorrectPw()
+    {
+        //act
+        var mockPassword = "Password123!";
+        var incorrectMockPassword = "TestPassword123!";
+        var hashedMockPw = PasswordHasher.HashPassword(mockPassword);
+        var result = PasswordHasher.VerifyPassword(incorrectMockPassword, hashedMockPw);
+        
+        //assert
+        Assert.False(result);
     }
 }

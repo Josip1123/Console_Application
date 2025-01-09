@@ -7,4 +7,9 @@ public static class PasswordHasher
     {
         return BCrypt.HashPassword(password);
     }
+
+    public static bool VerifyPassword(string password, string hashedPassword)
+    {
+        return BCrypt.Verify(password, hashedPassword);
+    }
 }
