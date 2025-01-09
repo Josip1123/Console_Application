@@ -37,7 +37,7 @@ public class MainMenuLogic(IUserService userService)
         }
     }
 
-    private void HandleInvalidInput()
+    public void HandleInvalidInput()
     {
         Console.WriteLine("INVALID FORMAT: Type in number or name of the menu option");
         var userInput = Console.ReadLine()!.Trim().ToLower();
