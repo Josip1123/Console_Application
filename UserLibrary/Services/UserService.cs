@@ -50,7 +50,7 @@ public class UserService : IUserService
         }
     }
 
-    public void InitializeUsers(string filePath)
+    public List<UserEntity> InitializeUsers(string filePath)
     {
         if (!File.Exists(filePath))
         {
@@ -62,6 +62,8 @@ public class UserService : IUserService
         var usersFromListTxt = JsonSerializer.Deserialize<List<UserEntity>>(usersFromListJson);
 
         _savedUsers = usersFromListTxt!;
+
+        return _savedUsers;
     }
 
     public UserEntity? Register()

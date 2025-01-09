@@ -57,7 +57,7 @@ public class UserServiceTests
 
         mockService
             .Setup(s => s.SaveUsers(filePath, userEntities))
-            .Callback<string, List<UserEntity>>((path, users) => { throw new Exception("Mocked Exception"); });
+            .Callback(() => { throw new Exception("Mocked Exception"); });
         using var consoleOutput = new StringWriter();
         Console.SetOut(consoleOutput);
 
@@ -148,6 +148,70 @@ public class UserServiceTests
         // Assert
         Assert.Contains("Invalid file:", output);
 
+    }
+
+    [Fact]
+    public void Register_shouldReturnNull_IfUserHasntCompleatedRegistration()
+    {
+        //Arrange
+        var mockService = new Mock<IUserService>();
+        bool isNotDone = true;
+        UserEntity nullEntity = null!;
+        UserEntity userEntity = new()
+            { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!" };
+        
+        mockService.Setup(userService => userService.Register()).Returns(nullEntity);
+        
+        //Act
+        
+        var result = isNotDone ? mockService.Object.Register() : userEntity;
+       
+        //Assert
+        Assert.Null(result);
+    }
+    
+    [Fact]
+    public void Register_shouldReturnUserEntity_WhenUserCompleatedReg()
+    {
+        //Arrange
+        var mockService = new Mock<IUserService>();
+        bool isDone = true;
+        UserEntity userEntity = new()
+            { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!" };
+
+        mockService.Setup(userService => userService.Register()).Returns(userEntity);
+        
+        //Act
+        
+        var result = isDone ? mockService.Object.Register() : null;
+       
+        //Assert
+        Assert.NotNull(result);
+        Assert.IsType<UserEntity>(result);
+    }
+    
+    [Fact]
+    public void InitializeUsers_ShouldReturnListFormTheFile()
+    {
+        //Arrange
+        var mockService = new Mock<IUserService>();
+        var filePath = "Mock_File.txt";
+        var userEntities = new List<UserEntity>
+        {
+            new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+            new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+        };
+
+        mockService.Setup(userService => userService.InitializeUsers(filePath)).Returns(userEntities);
+        
+        //Act
+
+        var result = mockService.Object.InitializeUsers(filePath);
+       
+        //Assert
+        Assert.NotNull(result);
+        Assert.IsType<List<UserEntity>>(result);
+        Assert.Equal(2, result.Count);
     }
 }
 
