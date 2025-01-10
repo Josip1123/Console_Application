@@ -1,6 +1,8 @@
 using Console_Contact_App.Presentation;
+using UserLibrary.Factories;
 using UserLibrary.Interfaces;
 using UserLibrary.Models;
+
 
 namespace Console_Contact_App.Services;
 
@@ -26,7 +28,10 @@ public class MainMenuLogic(IUserService userService)
                 case "2":
                     HandleShowAllUsers();
                     break;
-                case "3":
+                case "3" :
+                    HandleDeleteUser();
+                    break;
+                case "5":
                     HandleExit();
                     break;
                 default:
@@ -37,7 +42,7 @@ public class MainMenuLogic(IUserService userService)
         }
     }
 
-    public void HandleInvalidInput()
+    private void HandleInvalidInput()
     {
         Console.WriteLine("INVALID FORMAT: Type in number or name of the menu option");
         var userInput = Console.ReadLine()!.Trim().ToLower();
@@ -74,10 +79,24 @@ public class MainMenuLogic(IUserService userService)
 
     private void HandleShowAllUsers()
     {
-        Console.WriteLine("Showing All Contacts...");
+        
         try
         {
-            var users = userService.GetUsers("Users.txt");
+            var userEntities = userService.GetUsers("Users.txt");
+            var users = userEntities.Select(userEntity => UserFactory.Create(userEntity)).ToList();
+            if (userEntities.Count != 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Showing All Contacts...");
+                Console.ResetColor();
+                
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("No Contacts to show...");
+                Console.ResetColor();
+            }
             foreach (var item in users)
             {
                 Console.WriteLine(
@@ -92,6 +111,30 @@ public class MainMenuLogic(IUserService userService)
             Console.WriteLine(e);
         }
 
+        MainMenu.ShowMainMenu();
+        var userInput = Console.ReadLine()!.Trim().ToLower();
+        GetUserInput(userInput);
+    }
+
+    private void HandleDeleteUser()
+    {
+        Console.WriteLine("Enter the ID of the user you want to delete:");
+        var userId = Console.ReadLine()!.Trim();
+
+        if (userId.Length < 36)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Not Valid GUID, try again");
+            Console.ResetColor();
+            HandleDeleteUser();
+        }
+        
+        var users = userService.GetUsers("Users.txt");
+
+        var newList = userService.DeleteUser(userId, users);
+        
+        userService.RewriteUsers("Users.txt", newList);
+        
         MainMenu.ShowMainMenu();
         var userInput = Console.ReadLine()!.Trim().ToLower();
         GetUserInput(userInput);

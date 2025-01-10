@@ -11,13 +11,30 @@ public class UserService : IUserService
     private List<UserEntity> _savedUsers = [];
 
     public void SaveUsers(string filePath, List<UserEntity> userEntities)
+         {
+             try
+             {
+                 _savedUsers.AddRange(userEntities);
+                 File.WriteAllText(filePath, JsonSerializer.Serialize(_savedUsers));
+                 Console.ForegroundColor = ConsoleColor.DarkGreen;
+                 Console.WriteLine("User saved successfully!");
+                 Console.ResetColor();
+             }
+             catch (Exception e)
+             {
+                 Console.WriteLine($"Something went wrong while saving the user {e.Message}");
+             }
+         }
+    
+    public void RewriteUsers(string filePath, List<UserEntity> userEntities)
     {
         try
         {
+            _savedUsers = [];
             _savedUsers.AddRange(userEntities);
             File.WriteAllText(filePath, JsonSerializer.Serialize(_savedUsers));
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("User saved successfully!");
+            Console.WriteLine("User list updated");
             Console.ResetColor();
         }
         catch (Exception e)
@@ -26,7 +43,7 @@ public class UserService : IUserService
         }
     }
 
-    public List<User> GetUsers(string filePath)
+    public List<UserEntity> GetUsers(string filePath)
     {
         try
         {
@@ -41,8 +58,8 @@ public class UserService : IUserService
             }
 
             var usersFromListTxt = JsonSerializer.Deserialize<List<UserEntity>>(usersFromListJson);
-            _savedUsers = usersFromListTxt!;
-            return _savedUsers.Select(userEntity => UserFactory.Create(userEntity)).ToList();
+            return _savedUsers = usersFromListTxt!;
+             
         }
         catch (Exception e)
         {
@@ -106,5 +123,23 @@ public class UserService : IUserService
         }
 
         return userEntity;
+    }
+
+    public List<UserEntity> DeleteUser(string id, List<UserEntity> users)
+    {
+        try
+        {
+            users.RemoveAll(item => item.UserId!.Contains(id));
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("User deleted successfully!");
+            Console.ResetColor();
+            return users;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 }

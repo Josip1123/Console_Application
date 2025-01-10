@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Moq;
-using UserLibrary.Factories;
 using UserLibrary.Interfaces;
 using UserLibrary.Models;
 
@@ -81,7 +80,7 @@ public class UserServiceTests
         // Arrange
         var mockService = new Mock<IUserService>();
         var filePath = "Test_Not_Found.txt";
-        List<User> userEntities = [];
+        List<UserEntity> userEntities = [];
 
         mockService
             .Setup(s => s.GetUsers(filePath))
@@ -108,14 +107,14 @@ public class UserServiceTests
             new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
         };
 
-        mockService.Setup(userService => userService.GetUsers(filePath)).Returns(userEntities.Select(userEntity => UserFactory.Create(userEntity)).ToList());
+        mockService.Setup(userService => userService.GetUsers(filePath)).Returns(userEntities);
 
         // act
         var result = mockService.Object.GetUsers(filePath);
 
 
         // Assert
-        Assert.IsType<List<User>>(result);
+        Assert.IsType<List<UserEntity>>(result);
         Assert.Equal(2, result.Count);
 
     }
