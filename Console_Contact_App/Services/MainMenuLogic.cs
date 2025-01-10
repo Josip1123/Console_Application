@@ -1,5 +1,6 @@
 using Console_Contact_App.Presentation;
 using UserLibrary.Factories;
+using UserLibrary.Helpers;
 using UserLibrary.Interfaces;
 using UserLibrary.Models;
 
@@ -31,6 +32,9 @@ public class MainMenuLogic(IUserService userService)
                 case "3" :
                     HandleDeleteUser();
                     break;
+                case "4":
+                    HandleEdit();
+                    break;
                 case "5":
                     HandleExit();
                     break;
@@ -53,7 +57,7 @@ public class MainMenuLogic(IUserService userService)
     private void HandleRegisterUser()
     {
         userService.InitializeUsers("Users.txt");
-        var userEntity = userService.Register();
+        var userEntity = userService.Register(GuidCreator.CreateNewId());
 
         if (userEntity == null) HandleRegisterUser();
         userService.SaveUsers("Users.txt", [userEntity!]);
@@ -121,7 +125,7 @@ public class MainMenuLogic(IUserService userService)
         Console.WriteLine("Enter the ID of the user you want to delete:");
         var userId = Console.ReadLine()!.Trim();
 
-        if (userId.Length < 36)
+        if (userId.Length < 36 && !Guid.TryParse(userId, out _))
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Not Valid GUID, try again");
@@ -134,6 +138,33 @@ public class MainMenuLogic(IUserService userService)
         var newList = userService.DeleteUser(userId, users);
         
         userService.RewriteUsers("Users.txt", newList);
+        
+        MainMenu.ShowMainMenu();
+        var userInput = Console.ReadLine()!.Trim().ToLower();
+        GetUserInput(userInput);
+    }
+
+    private void HandleEdit()
+    {
+        var list = userService.GetUsers("Users.txt");
+        Console.WriteLine("Enter the ID of the user you want to edit:");
+        
+        var wantToChangeInput = Console.ReadLine()!.Trim();
+        
+        bool exists = list.Any(user => user.UserId!.Contains(wantToChangeInput));
+
+        if (!exists)
+        {
+            Console.WriteLine("No user that matches ID, please provide valid User ID.");
+            HandleEdit();
+        }
+        
+        var indexOfUserToChange = userService.GetIndex(list, wantToChangeInput);
+        
+        var editedUser = userService.Register(wantToChangeInput);
+        list[indexOfUserToChange] = editedUser!;
+        
+        userService.RewriteUsers("Users.txt", list);
         
         MainMenu.ShowMainMenu();
         var userInput = Console.ReadLine()!.Trim().ToLower();

@@ -1,6 +1,5 @@
 using System.Text.Json;
 using UserLibrary.Factories;
-using UserLibrary.Helpers;
 using UserLibrary.Interfaces;
 using UserLibrary.Models;
 
@@ -11,21 +10,21 @@ public class UserService : IUserService
     private List<UserEntity> _savedUsers = [];
 
     public void SaveUsers(string filePath, List<UserEntity> userEntities)
-         {
-             try
-             {
-                 _savedUsers.AddRange(userEntities);
-                 File.WriteAllText(filePath, JsonSerializer.Serialize(_savedUsers));
-                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                 Console.WriteLine("User saved successfully!");
-                 Console.ResetColor();
-             }
-             catch (Exception e)
-             {
-                 Console.WriteLine($"Something went wrong while saving the user {e.Message}");
-             }
-         }
-    
+    {
+        try
+        {
+            _savedUsers.AddRange(userEntities);
+            File.WriteAllText(filePath, JsonSerializer.Serialize(_savedUsers));
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("User saved successfully!");
+            Console.ResetColor();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Something went wrong while saving the user {e.Message}");
+        }
+    }
+
     public void RewriteUsers(string filePath, List<UserEntity> userEntities)
     {
         try
@@ -59,7 +58,7 @@ public class UserService : IUserService
 
             var usersFromListTxt = JsonSerializer.Deserialize<List<UserEntity>>(usersFromListJson);
             return _savedUsers = usersFromListTxt!;
-             
+
         }
         catch (Exception e)
         {
@@ -83,7 +82,7 @@ public class UserService : IUserService
         return _savedUsers;
     }
 
-    public UserEntity? Register()
+    public UserEntity? Register(string id)
     {
         var isDoneRegistering = false;
         UserEntity? userEntity = null;
@@ -99,11 +98,14 @@ public class UserService : IUserService
             registrationForm.Surname = Validators.ValidateInput("last name");
 
             Console.WriteLine("Type your email");
-            registrationForm.Email = Validators.ValidateWithRegex("email", "Type in valid Email Address", @"^[^@\s]+@[^@\s]+\.[^@\s]+$"
-                );
+            registrationForm.Email = Validators.ValidateWithRegex("email", "Type in valid Email Address",
+                @"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+            );
 
-            Console.WriteLine("Type in your password that should contain an number, symbol, uppercase letter and be minimum of 8 characters long:");
-            registrationForm.Password = Validators.ValidateWithRegex("password", "Wrong format",@"^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$");
+            Console.WriteLine(
+                "Type in your password that should contain an number, symbol, uppercase letter and be minimum of 8 characters long:");
+            registrationForm.Password = Validators.ValidateWithRegex("password", "Wrong format",
+                @"^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$");
 
             Console.WriteLine("Please confirm your password: ");
             registrationForm.ConfirmedPassword =
@@ -117,7 +119,7 @@ public class UserService : IUserService
 
             userEntity = UserFactory.Create(
                 registrationForm,
-                GuidCreator.CreateNewId()
+                id
             );
             isDoneRegistering = true;
         }
@@ -140,6 +142,27 @@ public class UserService : IUserService
             Console.WriteLine("Something Went Wrong While Deleting User" + e);
             throw;
         }
+
+    }
+
+    public int GetIndex(List<UserEntity> users, string id)
+    
+    {
+        try
+        {
+            var userToEdit = users.FirstOrDefault(user => user.UserId == id)!;
+
+            var userIndex = users.IndexOf(userToEdit);
+
+            return userIndex;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
         
     }
+
 }

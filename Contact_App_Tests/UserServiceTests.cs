@@ -160,11 +160,11 @@ public class UserServiceTests
         UserEntity userEntity = new()
             { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!" };
         
-        mockService.Setup(userService => userService.Register()).Returns(nullEntity);
+        mockService.Setup(userService => userService.Register("1")).Returns(nullEntity);
         
         //Act
         
-        var result = isNotDone ? mockService.Object.Register() : userEntity;
+        var result = isNotDone ? mockService.Object.Register("1") : userEntity;
        
         //Assert
         Assert.Null(result);
@@ -177,13 +177,13 @@ public class UserServiceTests
         var mockService = new Mock<IUserService>();
         bool isDone = true;
         UserEntity userEntity = new()
-            { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!" };
+            { Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!" };
 
-        mockService.Setup(userService => userService.Register()).Returns(userEntity);
+        mockService.Setup(userService => userService.Register("1")).Returns(userEntity);
         
         //Act
         
-        var result = isDone ? mockService.Object.Register() : null;
+        var result = isDone ? mockService.Object.Register("1") : null;
        
         //Assert
         Assert.NotNull(result);
@@ -234,6 +234,7 @@ public class UserServiceTests
             Assert.Single(result);
             Assert.IsType<List<UserEntity>>(result);
             Assert.DoesNotContain(result, userEntity => userEntity.UserId == idToDelete);
+            Assert.Contains(result, userEntity => userEntity.UserId == "2");
 
         }
         
