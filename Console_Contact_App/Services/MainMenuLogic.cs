@@ -92,15 +92,15 @@ public class MainMenuLogic(IUserService userService)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Showing All Contacts...");
-                Console.ResetColor();
                 
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("No Contacts to show...");
-                Console.ResetColor();
             }
+            Console.ResetColor();
+            
             foreach (var item in users)
             {
                 Console.WriteLine(

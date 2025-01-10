@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Moq;
 using UserLibrary.Interfaces;
@@ -257,6 +258,47 @@ public class UserServiceTests
             Assert.Equal(2, result.Count);
             Assert.Contains(result, user => user.UserId == "1");
             Assert.Contains(result, user => user.UserId == "2");
+
+        }
+
+        [Fact]
+        public void GetIndex_ShouldReturnIndexOfItemFromList_WhenProvidedWIthValidUserId()
+        {
+            //arrange
+            IUserService userService = new UserService();
+            var users = new List<UserEntity>
+            {
+                new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+                new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+            };
+            int testTargetIndex = users.FindIndex(user => user.UserId == "2");
+            
+            
+            //act
+            var result = userService.GetIndex(users, "2");
+            
+            //assert
+            Assert.Equal(result.ToString(), users[result - 1].UserId);
+            Assert.Equal(result, testTargetIndex );
+        }
+        
+        [Fact]
+        public void GetIndex_ShouldReturnDefaultValue_WhenProvidedWIthInvalidUserId()
+        {
+            //arrange
+            IUserService userService = new UserService();
+            var users = new List<UserEntity>
+            {
+                new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+                new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+            };
+            
+            //act
+            var result = userService.GetIndex(users, "3");
+            
+            //assert
+            // default value -1 for linq function FirstOrDefault() when using with lists;
+            Assert.Equal(-1, result);
 
         }
 }

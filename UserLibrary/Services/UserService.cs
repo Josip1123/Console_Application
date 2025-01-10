@@ -158,7 +158,7 @@ public class UserService : IUserService
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine("ID does not exist" + e);
             throw;
         }
         
