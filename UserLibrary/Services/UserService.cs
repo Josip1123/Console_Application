@@ -137,7 +137,7 @@ public class UserService : IUserService
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine("Something Went Wrong While Deleting User" + e);
             throw;
         }
         

@@ -2,6 +2,7 @@ using System.Text.Json;
 using Moq;
 using UserLibrary.Interfaces;
 using UserLibrary.Models;
+using UserLibrary.Services;
 
 
 namespace Contact_App_Tests;
@@ -36,7 +37,7 @@ public class UserServiceTests
         var jsonedData = JsonSerializer.Deserialize<List<UserEntity>>(fileData);
 
         // Assert
-        Assert.True(File.Exists(filePath), "Expected file to be created by the mock callback.");
+        Assert.True(File.Exists(filePath));
         Assert.Contains("John", fileData);
         Assert.Contains("Jane", fileData);
         Assert.Equal(2,jsonedData!.Count);
@@ -212,6 +213,51 @@ public class UserServiceTests
         Assert.IsType<List<UserEntity>>(result);
         Assert.Equal(2, result.Count);
     }
+    
+        [Fact]
+        public void DeleteUser_ShouldRemoveUserFromTheLIst_WhenCorrectIdIsProvided()
+        {
+            //arrange
+            IUserService userService = new UserService();
+            var idToDelete = "1";
+            var users = new List<UserEntity>
+            {
+                new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+                new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+            };
+            // act
+
+            var result = userService.DeleteUser(idToDelete, users);
+        
+            // assert
+        
+            Assert.Single(result);
+            Assert.IsType<List<UserEntity>>(result);
+            Assert.DoesNotContain(result, userEntity => userEntity.UserId == idToDelete);
+
+        }
+        
+        [Fact]
+        public void DeleteUser_ShouldFail_WhenIncorrectIdIsProvided()
+        {
+            //arrange
+            IUserService userService = new UserService();
+            var idToDelete = "3";
+            var users = new List<UserEntity>
+            {
+                new() { UserId = "1", Name = "John", Surname = "Doe", Email = "john@email.com", Password = "Password123!"},
+                new() { UserId = "2", Name = "Jane", Surname = "Smith", Email = "jane@email.com", Password = "Password123!!!"}
+            };
+            
+            // act
+            var result = userService.DeleteUser(idToDelete, users);
+        
+            // assert
+            Assert.Equal(2, result.Count);
+            Assert.Contains(result, user => user.UserId == "1");
+            Assert.Contains(result, user => user.UserId == "2");
+
+        }
 }
 
 
