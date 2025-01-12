@@ -35,7 +35,10 @@ public class MainMenuLogic(IUserService userService)
                 case "4":
                     HandleEdit();
                     break;
-                case "5":
+                case "5" :
+                    HandleClearConsole();
+                    break;
+                case "6":
                     HandleExit();
                     break;
                 default:
@@ -51,6 +54,12 @@ public class MainMenuLogic(IUserService userService)
         Console.WriteLine("INVALID FORMAT: Type in number or name of the menu option");
         var userInput = Console.ReadLine()!.Trim().ToLower();
         GetUserInput(userInput);
+    }
+
+    private void HandleClearConsole()
+    {
+        Console.Clear();
+        RerunMainMenu();
     }
 
 
@@ -74,9 +83,7 @@ public class MainMenuLogic(IUserService userService)
         else
         {
             _isSelected = false;
-            MainMenu.ShowMainMenu();
-            var userInput = Console.ReadLine()!.Trim().ToLower();
-            GetUserInput(userInput);
+            RerunMainMenu();
         }
     }
 
@@ -115,13 +122,12 @@ public class MainMenuLogic(IUserService userService)
             Console.WriteLine(e);
         }
 
-        MainMenu.ShowMainMenu();
-        var userInput = Console.ReadLine()!.Trim().ToLower();
-        GetUserInput(userInput);
+        RerunMainMenu();
     }
 
     private void HandleDeleteUser()
     {
+        var users = userService.GetUsers("Users.txt");
         Console.WriteLine("Enter the ID of the user you want to delete:");
         var userId = Console.ReadLine()!.Trim();
 
@@ -133,24 +139,36 @@ public class MainMenuLogic(IUserService userService)
             HandleDeleteUser();
         }
         
-        var users = userService.GetUsers("Users.txt");
+        bool exists = users.Any(user => user.UserId!.Contains(userId));
+
+        if (!exists)
+        {
+            Console.WriteLine("No user that matches ID, please provide valid User ID.");
+            HandleDeleteUser();
+        }
+        
 
         var newList = userService.DeleteUser(userId, users);
         
         userService.RewriteUsers("Users.txt", newList);
         
-        MainMenu.ShowMainMenu();
-        var userInput = Console.ReadLine()!.Trim().ToLower();
-        GetUserInput(userInput);
+        RerunMainMenu();
     }
 
     private void HandleEdit()
     {
         var list = userService.GetUsers("Users.txt");
         Console.WriteLine("Enter the ID of the user you want to edit:");
-        
         var wantToChangeInput = Console.ReadLine()!.Trim();
         
+        if (wantToChangeInput.Length < 36 && !Guid.TryParse(wantToChangeInput, out _))
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Not Valid GUID, try again");
+            Console.ResetColor();
+            HandleEdit();
+        }
+
         bool exists = list.Any(user => user.UserId!.Contains(wantToChangeInput));
 
         if (!exists)
@@ -166,9 +184,7 @@ public class MainMenuLogic(IUserService userService)
         
         userService.RewriteUsers("Users.txt", list);
         
-        MainMenu.ShowMainMenu();
-        var userInput = Console.ReadLine()!.Trim().ToLower();
-        GetUserInput(userInput);
+        RerunMainMenu();
     }
 
     private void HandleExit()
@@ -177,5 +193,12 @@ public class MainMenuLogic(IUserService userService)
         _isSelected = true;
         Console.ReadKey();
         Environment.Exit(0);
+    }
+
+    private void RerunMainMenu()
+    {
+        MainMenu.ShowMainMenu();
+        var userInput = Console.ReadLine()!.Trim().ToLower();
+        GetUserInput(userInput);
     }
 }
